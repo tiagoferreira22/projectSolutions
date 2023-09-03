@@ -6,12 +6,21 @@ use App\Http\Requests\ProjectFormEditRequest;
 use App\Http\Requests\ProjectFormRequest;
 use App\Models\Project;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class ProjectController extends Controller
 {
     public function index()
     {
         $projects = Project::orderBy('created_at', 'desc')->paginate(10)->withQueryString()->onEachSide(1);
+
+        $projects->transform(function ($project) {
+            $limit = 20; // Defina o número máximo de palavras desejado
+            $project->limited_description = Str::limit($project->description, $limit);
+            return $project;
+        });
+
 
         return view('project.index', compact('projects'));
     }
@@ -80,13 +89,25 @@ class ProjectController extends Controller
         $project = Project::findOrFail($project_id);
         $data = $request->validated();
 
+        $updatePdf = false;
+        $updatePhotos = false;
+
+        // Verifique se um novo arquivo PDF foi enviado
         if ($request->hasFile('pdf_file')) {
             $pdf = $request->file('pdf_file');
             $pdfName = time() . '_' . $pdf->getClientOriginalName();
             $pdf->storeAs('pdfs', $pdfName);
             $data['pdf_file'] = $pdfName;
+
+            // Exclua o arquivo PDF antigo, se existir
+            if (!empty($project->pdf_file)) {
+                Storage::delete('pdfs/' . $project->pdf_file);
+            }
+
+            $updatePdf = true;
         }
 
+        // Verifique se novas imagens foram enviadas
         if ($request->hasFile('photo_file')) {
             $imageNames = [];
             foreach ($request->file('photo_file') as $image) {
@@ -95,30 +116,50 @@ class ProjectController extends Controller
                 $imageNames[] = $imageName;
             }
             $data['photo_file'] = json_encode($imageNames);
+
+            // Exclua as imagens antigas, se existirem
+            if (!empty($project->photo_file)) {
+                $oldPhotoFiles = json_decode($project->photo_file);
+                foreach ($oldPhotoFiles as $oldPhotoFile) {
+                    $oldPhotoPath = public_path('images/' . $oldPhotoFile);
+                    if (file_exists($oldPhotoPath)) {
+                        unlink($oldPhotoPath);
+                    }
+                }
+            }
+
+            $updatePhotos = true;
         }
 
-        $project->update($data);
+        // Atualize o projeto apenas se houver atualização nos campos correspondentes
+        if ($updatePdf || $updatePhotos) {
+            $project->update($data);
+        }
 
         return redirect()->route('project.index')->with('success', 'Projeto atualizado com sucesso');
     }
+
 
     public function destroy($project_id)
     {
         $project = Project::findOrFail($project_id);
 
-        // Exclua o arquivo PDF associado, se existir
         if (!empty($project->pdf_file)) {
             Storage::delete('pdfs/' . $project->pdf_file);
         }
 
-        // Exclua os arquivos de fotos associados, se existirem
         if (!empty($project->photo_file)) {
             $photoFiles = json_decode($project->photo_file);
             foreach ($photoFiles as $photoFile) {
-                Storage::delete('images/' . $photoFile);
+                $photoPath = public_path('images/' . $photoFile);
+                if (file_exists($photoPath)) {
+                    unlink($photoPath); // Excluir o arquivo de imagem
+                } else {
+                    // Adicione uma mensagem de depuração para verificar o caminho
+                    dd("Arquivo não encontrado: " . $photoPath);
+                }
             }
         }
-
 
         $project->delete();
 

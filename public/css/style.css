@@ -1,11 +1,7 @@
-.card p {
-    color: #ffffff;
-}
-
 .card {
     box-shadow: 0px 10px 20px rgba(31, 41, 55, 0.1);
-    color: #ffffff;
-    background: transparent;
+    color: #ffffff !important;
+    background: transparent !important;
     border-radius: 20px;
     border: none !important;
     padding: 30px;
@@ -31,7 +27,7 @@
     margin-bottom: 5px;
 }
 
-.photo_project_item {
+.photo_project_item_info {
     padding: 5px;
     margin-right: 5px;
     line-height: 35px;
@@ -40,7 +36,7 @@
     display: inline-block;
 }
 
-.photo_project_item img {
+.photo_project_item_info img {
     width: 300px;
     display: flex;
     justify-content: center;
@@ -48,9 +44,31 @@
     transition: 0.5s;
 }
 
-.photo_project_item:hover img {
+.photo_project_item_info:hover img {
     box-shadow: 0px 0px 10px rgba(53, 56, 60, 0.7);
     transform: translate3D(0, -1px, 0) scale(1.05);
+}
+
+.photo_project_item_edit {
+    padding: 5px;
+    margin-right: 5px;
+    line-height: 35px;
+    background-color: #2c2c2cb3;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.photo_project_item_edit img {
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+}
+
+.photo_project_item_edit:hover img {
+    box-shadow: 0px 0px 10px rgba(53, 56, 60, 0.7);
+    transform: translate3D(0, -1px, 0) scale(1.1);
 }
 
 .card-header {
@@ -58,6 +76,6 @@
     justify-content: space-between;
 }
 
-.card-header .card-title {
+.card-header h1.card-title {
     font-size: 30px !important;
 }

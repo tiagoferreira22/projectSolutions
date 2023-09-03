@@ -24,7 +24,7 @@
                                 @endif
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title"><strong>Nome do Cliente:</strong>{{ $project->client_name }}</h5>
+                                <h6 class="card-title"><strong>Nome do Cliente:</strong>{{ $project->client_name }}</h6>
 
                                 @if ($project->observation)
                                     <p class="card-text"><strong>Observação:</strong> {{ $project->observation }}</p>
@@ -40,7 +40,7 @@
                                     <p class="photo_project_title">Fotos do projeto:</p>
                                     @if (!empty($project->photo_file))
                                         @foreach (json_decode($project->photo_file) as $photoName)
-                                        <span class="photo_project_item">
+                                        <span class="photo_project_item_info">
                                             <img src="{{ asset('images/' . $photoName) }}" alt="Foto do Projeto">
                                         </span>
                                         @endforeach

@@ -38,7 +38,7 @@
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $index + 1 }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->client_name }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->title }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->description }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->limited_description }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->observation }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->project_link }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">
@@ -56,9 +56,11 @@
                             @empty
                                 <tr>
                                     <td colspan="3"></td>
-                                    <td colspan="1" class="mt-3">
-                                        <span>Não a dados</span>
-                                        <a class="btn btn-primary" href="{{ route('project.create') }}">Criar dado</a>
+                                    <td colspan="1">
+                                        <div class="mt-3">
+                                            <span>Não a dados. Crie seu primeiro dado.</span>
+                                            <a class="btn btn-primary" href="{{ route('project.create') }}">Criar dado</a>
+                                        </div>
                                     </td>
                                     <td colspan="3"></td>
                                 </tr>
