@@ -7,7 +7,7 @@ use App\Http\Requests\ProjectFormRequest;
 use App\Models\Project;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
+use ZipArchive;
 
 class ProjectController extends Controller
 {
@@ -164,5 +164,42 @@ class ProjectController extends Controller
         $project->delete();
 
         return redirect()->route('project.index')->with('delete_success', 'Projeto deletado com sucesso');
+    }
+
+    public function downloadProjectFiles($project_id)
+    {
+        $project = Project::findOrFail($project_id);
+
+        $zip = new ZipArchive();
+        $zipFileName = 'project_files.zip';
+        $zipFilePath = storage_path('app/' . $zipFileName);
+
+        if ($zip->open($zipFilePath, ZipArchive::CREATE) === TRUE) {
+            // Adicione o arquivo PDF ao ZIP
+            if (!empty($project->pdf_file)) {
+                $pdfFilePath = storage_path('app/pdfs/' . $project->pdf_file);
+                if (file_exists($pdfFilePath)) {
+                    $zip->addFile($pdfFilePath, 'pdf/' . $project->pdf_file);
+                }
+            }
+
+            // Adicione as imagens ao ZIP
+            if (!empty($project->photo_file)) {
+                $photoFiles = json_decode($project->photo_file);
+                foreach ($photoFiles as $photoFile) {
+                    $photoFilePath = public_path('images/' . $photoFile);
+                    if (file_exists($photoFilePath)) {
+                        $zip->addFile($photoFilePath, 'images/' . $photoFile);
+                    }
+                }
+            }
+
+            $zip->close();
+
+            // Envie o arquivo ZIP para download
+            return response()->download($zipFilePath)->deleteFileAfterSend(true);
+        } else {
+            return redirect()->route('project.index')->with('error', 'Erro ao criar o arquivo ZIP.');
+        }
     }
 }

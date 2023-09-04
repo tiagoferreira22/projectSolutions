@@ -30,4 +30,5 @@ Route::controller(ProjectController::class)->group(function () {
     Route::put('/project/edit/{project_id}', 'update')->name('project.update');
     Route::delete('/project/delete/{project_id}', 'destroy')->name('project.delete');
     Route::get('/download-pdf/{filename}', 'downloadPDF')->name('download.pdf');
+    Route::get('project/download/{project_id}', 'downloadProjectFiles')->name('project.download');
 });

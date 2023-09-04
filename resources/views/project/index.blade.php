@@ -11,6 +11,8 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <x-success-status class="mb-4 alert alert-success" :status="session('success')" />
                     <x-success-status class="mb-4 alert alert-warning" :status="session('delete_success')" />
+                    <x-error-status class="mb-4 alert alert-danger" :status="session('error')" />
+
 
                     <div class="pagination">
                         @if ($projects->total() > 0)
