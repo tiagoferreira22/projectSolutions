@@ -18,8 +18,13 @@
                         @if ($projects->total() > 0)
                             Mostrando {{ $projects->firstItem() }} a {{ $projects->lastItem() }} de {{ $projects->total() }} resultados
                         @else
-                            Não há resultados
+                            Não há resultados  <a class="btn btn-primary ml-3" href="{{ route('project.create') }}">Criar dado</a>
                         @endif
+                    </div>
+
+                    <div class="mt-3">
+
+
                     </div>
 
                     <table class="min-w-full text-left text-sm font-light">
@@ -59,10 +64,7 @@
                                 <tr>
                                     <td colspan="3"></td>
                                     <td colspan="1">
-                                        <div class="mt-3">
-                                            <span>Não a dados. Crie seu primeiro dado.</span>
-                                            <a class="btn btn-primary" href="{{ route('project.create') }}">Criar dado</a>
-                                        </div>
+
                                     </td>
                                     <td colspan="3"></td>
                                 </tr>

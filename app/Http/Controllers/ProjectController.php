@@ -13,7 +13,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $projects = Project::orderBy('created_at', 'desc')->paginate(10)->withQueryString()->onEachSide(1);
+        $projects = Project::orderBy('created_at', 'desc' )->paginate(10)->withQueryString()->onEachSide(1);
 
         $projects->transform(function ($project) {
             $limit = 20; // Defina o número máximo de palavras desejado
@@ -21,6 +21,12 @@ class ProjectController extends Controller
             return $project;
         });
 
+
+        $projects->transform(function ($project) {
+            $limit = 20; // Defina o número máximo de palavras desejado
+            $project->limited_observation = Str::limit($project->observation, $limit);
+            return $project;
+        });
 
         return view('project.index', compact('projects'));
     }
@@ -132,9 +138,18 @@ class ProjectController extends Controller
         }
 
         // Atualize o projeto apenas se houver atualização nos campos correspondentes
-        if ($updatePdf || $updatePhotos) {
+        if ($updatePdf || $updatePhotos ) {
             $project->update($data);
         }
+
+        $project->update([
+            'client_name' => $data['client_name'],
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'observation' => $data['observation'],
+            'project_link' => $data['project_link'],
+        ]);
+
 
         return redirect()->route('project.index')->with('success', 'Projeto atualizado com sucesso');
     }
