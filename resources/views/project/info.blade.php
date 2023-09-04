@@ -12,7 +12,10 @@
 
                         <div class="card">
                             <div class="card-header">
-                                <h1 class="card-title">{{ $project->title }}</h1>
+                                <div>
+                                    <h1 class="card-title">{{ $project->title }}</h1>
+                                    <h6 class="card-subtitle mb-2">{{ $project->created_at->format('d/m/Y H:i:s') }}</h6>
+                                </div>
                                 @if ($project->pdf_file)
                                     <div>
                                         <a href="{{ route('download.pdf', ['filename' => $project->pdf_file]) }}" class="btn btn-primary">
@@ -24,8 +27,7 @@
                                 @endif
                             </div>
                             <div class="card-body">
-                                <h6 class="card-title"><strong>Nome do Cliente:</strong>{{ $project->client_name }}</h6>
-
+                                <h5 class="card-title"><strong>Nome do Cliente:</strong>{{ $project->client_name }}</h5>
                                 @if ($project->observation)
                                     <p class="card-text"><strong>Observação:</strong> {{ $project->observation }}</p>
                                 @endif
