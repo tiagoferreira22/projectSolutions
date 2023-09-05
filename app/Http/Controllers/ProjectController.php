@@ -16,15 +16,11 @@ class ProjectController extends Controller
         $projects = Project::orderBy('created_at', 'desc' )->paginate(10)->withQueryString()->onEachSide(1);
 
         $projects->transform(function ($project) {
-            $limit = 20; // Defina o número máximo de palavras desejado
+            $limit = 20;
             $project->limited_description = Str::limit($project->description, $limit);
-            return $project;
-        });
-
-
-        $projects->transform(function ($project) {
-            $limit = 20; // Defina o número máximo de palavras desejado
             $project->limited_observation = Str::limit($project->observation, $limit);
+            $project->limited_client_name = Str::limit($project->client_name, $limit);
+            $project->limited_title = Str::limit($project->title, $limit);
             return $project;
         });
 
@@ -150,6 +146,14 @@ class ProjectController extends Controller
             'project_link' => $data['project_link'],
         ]);
 
+        $project->transform(function ($project) {
+            $limit = 20;
+            $project->limited_description = Str::limit($project->description, $limit);
+            $project->limited_observation = Str::limit($project->observation, $limit);
+            $project->limited_client_name = Str::limit($project->client_name, $limit);
+            $project->limited_title = Str::limit($project->title, $limit);
+            return $project;
+        });
 
         return redirect()->route('project.index')->with('success', 'Projeto atualizado com sucesso');
     }
