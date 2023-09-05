@@ -42,10 +42,10 @@
                             @forelse ($projects as $index => $project)
                                 <tr class="border-b dark:border-neutral-500">
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $index + 1 }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->client_name }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->title }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->limited_client_name }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->limited_title }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->limited_description }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->observation }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4 font-medium">{{ $project->limited_observation }}</td>
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">
                                         <a href="{{ route('project.info', $project->id) }}" class="btn btn-info"><img src="{{ asset('img/svg-icon/eye-fill.svg') }}" alt="eye icon"></a>
                                         <a href="{{ route('project.edit', $project->id) }}" class="btn btn-primary"><img src="{{ asset('img/svg-icon/pencil-square.svg') }}" alt="pencil icon"></a>
